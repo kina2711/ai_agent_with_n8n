@@ -1,0 +1,275 @@
+{
+  "name": "Web",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1320,
+        100
+      ],
+      "id": "5ba5e3d8-f26a-4584-b069-debb71065faf",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are a helpful classifier.",
+              "role": "system"
+            },
+            {
+              "content": "=# Context\nYou will analyze company websites and news sections. Your task is to identify and extract URLs specifically related to company announcements, press releases, news articles, and blog posts that are dated. Focus on entries that have clear publication dates or timestamps.\n\n# Task\n\nRead the website content: {{ $json.data }}.\nFor context the date is {{ $now }}.\n\n## Extract URLs that match these criteria:\n\nContains news, press releases, or company updates\nHas a visible date nearby, indicating that this is a news\n\n## Ignore:\n\nProduct pages\nGeneral website sections\nUndated content\nOlder articles\n\n\n# Output format\n\nOutput the filtered URLs in JSON format:\n\n{\n  \"news_urls\": [\n    \"https://company.com/news/latest-announcement\",\n    \"https://company.com/news/new-product-launch\",\n    \"https://company.com/news/company-update\"\n  ]\n}\n\n# Important\n\nProvide all the links that match the requirements above."
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -880,
+        100
+      ],
+      "id": "0c68690d-8431-4ee7-a8c5-489b7e0c7d95",
+      "name": "OpenAI"
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/{{ $json.query }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -1100,
+        100
+      ],
+      "id": "de322542-8a25-42b3-992e-1e29f1fdf3dd",
+      "name": "Get News"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -280,
+        100
+      ],
+      "id": "4553a9fd-aef8-494c-9338-7c77fbf49cb6",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "url": "=https://r.jina.ai/{{ $json.news_url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        220
+      ],
+      "id": "5d44c735-e37d-4661-a0e9-b98b7612fe1a",
+      "name": "Loop Through News"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Retrieve the array of news URLs from the input data\nconst newsUrls = $input.first().json.message.content.news_urls;\n\n// Map each URL to its own output item\nconst output = newsUrls.map(url => {\n  return {\n    json: {\n      news_url: url\n    }\n  };\n});\n\n// Return the output array; n8n will treat each item separately\nreturn output;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -520,
+        100
+      ],
+      "id": "a0e56dc3-e8bc-4f5e-9140-43796a5c0e36",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "2ecd870e-6397-45f0-b728-fc59c79400de",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are a helpful news summarizer. ",
+              "role": "system"
+            },
+            {
+              "content": "=## Context\nYou will analyze a compilation of company news articles. Your task is to separate and summarize individual news items into structured, digestible insights. Focus on extracting the most impactful information from each article.\n\n## Task\nRead the news compilation and for each article:\n\nExtract key information\nCreate a structured summary\nInclude source details\n\n## Output Format\n\nFor each news item:\n\n[Company]:[Article Title]\n**Date**: [Publication Date if available]\n**Key Points**:\n- [First main insight]\n- [Second main insight]\n- [Third main insight]\n\n**Source**: [URL]\n\n---\n\n## Example:\n\nApple: Launches New AI Integration\n**Date**: February 6, 2025\n**Key Points**:\n- Company unveils neural engine for mobile devices\n- Partnership with leading AI research labs announced\n- Expected market release in Q3 2025\n\n**Source**: https://apple.com/apple-ai-news\n\n---"
+            },
+            {
+              "content": "=The compilation you need to analize: {{ $json.data }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        240,
+        0
+      ],
+      "id": "169dca36-9cbb-42f1-aada-bae318dd52ea",
+      "name": "Summary",
+      "credentials": {
+        "openAiApi": {
+          "id": "JkCpOPgVbLg2MpUx",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "query": "https://www.shopify.com/news"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get News",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get News": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Through News",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Through News": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Summary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f6ac7b9c-caa0-4a43-9f5a-90e3a67df48b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c0751754e5fba42ed05a61542eda960715d62bf9a01b491518dfeeb287b1523a"
+  },
+  "id": "d3ZBDuYOgOSUhZrS",
+  "tags": [
+    {
+      "createdAt": "2025-04-22T09:48:18.975Z",
+      "updatedAt": "2025-04-22T09:48:18.975Z",
+      "id": "u17jDGma8dof3GxP",
+      "name": "share"
+    }
+  ]
+}
