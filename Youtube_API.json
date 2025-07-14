@@ -1,0 +1,4290 @@
+{
+  "name": "Youtube API",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1920,
+        1740
+      ],
+      "id": "43d0e2bb-ea35-441a-b1fb-725c7d420ba9",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "operation": "getAll",
+        "playlistId": "={{ $json.items[0].contentDetails.relatedPlaylists.uploads }}",
+        "returnAll": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        520
+      ],
+      "id": "948f5821-3650-4022-977d-9d6a19cd85d2",
+      "name": "YouTube5",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "get",
+        "videoId": "={{ $json.snippet.resourceId.videoId }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        520
+      ],
+      "id": "310cdb0f-2131-464f-b8f5-947fbd7842cb",
+      "name": "YouTube6",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/channels",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "part",
+              "value": "id, snippet,contentDetails"
+            },
+            {
+              "name": "forHandle",
+              "value": "={{ $('Edit Fields3').item.json.url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -640,
+        520
+      ],
+      "id": "2735d8c7-289b-4b61-931d-04f66d9d95b6",
+      "name": "HTTP Request",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ff9d6be9-8aac-476f-b0d4-13ed5a90cfe4",
+              "name": "url",
+              "value": "https://www.youtube.com/@BacsiDuyAnhBV%C4%90KPhuongDong",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1220,
+        520
+      ],
+      "id": "899cee8e-7be9-4eb8-bf99-dd6a58e1110c",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "379a8db5-62f2-4549-8c58-99653ff69519",
+                    "leftValue": "={{ $('Edit Fields2').first().json.url }}",
+                    "rightValue": "com/@",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "username"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -880,
+        520
+      ],
+      "id": "b8da0a93-bcc4-4c21-81f9-a0704b7a9630",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "83afefc9-884e-4e7f-8bbd-088a0930bcea",
+              "name": "url",
+              "value": "={{ $json.url.split(\"/\").pop() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1040,
+        520
+      ],
+      "id": "aa89a39b-b856-42e9-a4a4-a8661b8877c7",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3536809e-bfcd-46a8-a58b-d581cbdf271a",
+              "name": "id",
+              "value": "=https://www.youtube.com/watch?v={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        520
+      ],
+      "id": "39fcfb47-5f67-4f92-bc13-42c802cc7f9f",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "content": "## Team 1\n### BS Duy Anh",
+        "height": 260,
+        "width": 1580
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1300,
+        420
+      ],
+      "id": "c6068764-f2b1-4445-9f98-a3d7cb08b1fd",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "operation": "getAll",
+        "playlistId": "={{ $json.items[0].contentDetails.relatedPlaylists.uploads }}",
+        "returnAll": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        820
+      ],
+      "id": "068d44bb-ed00-42d5-9311-8f19dc9c043c",
+      "name": "YouTube",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "get",
+        "videoId": "={{ $json.snippet.resourceId.videoId }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        820
+      ],
+      "id": "0b335559-dcfb-4b7f-b431-f14dceefc2a3",
+      "name": "YouTube7",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/channels",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "part",
+              "value": "id, snippet,contentDetails"
+            },
+            {
+              "name": "forHandle",
+              "value": "={{ $('Edit Fields4').item.json.url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -640,
+        820
+      ],
+      "id": "432d0e84-69c5-45d9-91a1-ce98baf6923d",
+      "name": "HTTP Request1",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ff9d6be9-8aac-476f-b0d4-13ed5a90cfe4",
+              "name": "url",
+              "value": "https://youtube.com/@bacsituananh-khoasanbvdkpd",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1220,
+        820
+      ],
+      "id": "21919e50-a4a0-4b9e-a7a0-a72893e341a7",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "379a8db5-62f2-4549-8c58-99653ff69519",
+                    "leftValue": "={{ $('Edit Fields').first().json.url }}",
+                    "rightValue": "com/@",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "username"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -880,
+        820
+      ],
+      "id": "f9625bc6-51b7-48b3-8e7a-31a7fbe96046",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "83afefc9-884e-4e7f-8bbd-088a0930bcea",
+              "name": "url",
+              "value": "={{ $json.url.split(\"/\").pop() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1040,
+        820
+      ],
+      "id": "daa48bcf-600b-415f-9eac-9716197b9da1",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3536809e-bfcd-46a8-a58b-d581cbdf271a",
+              "name": "id",
+              "value": "=https://www.youtube.com/watch?v={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        820
+      ],
+      "id": "fc388058-8bf5-4f35-9bb4-7bfed7699b79",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "content": "## Team 1\n### BS Tuấn Anh - Sản khoa",
+        "height": 260,
+        "width": 1580
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1300,
+        720
+      ],
+      "id": "31030a60-0601-4003-98ec-801495d010ea",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8fd3705c-547e-42d1-8041-d81147f344f1",
+              "name": "Team",
+              "value": "={{ $('Set Team').item.json.Team }}",
+              "type": "string"
+            },
+            {
+              "id": "625782ac-c798-422c-80b0-49d5f1e1418e",
+              "name": "Platform",
+              "value": "={{ $('Set Team').item.json.Platform }}",
+              "type": "string"
+            },
+            {
+              "id": "c27e3f19-838f-44e1-aef3-8680b471ae8f",
+              "name": "Tên Kênh",
+              "value": "={{ $json.snippet.channelTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "5e469de9-6c8e-49d4-a76f-45e4bdb44f86",
+              "name": "URL Kênh",
+              "value": "={{ $('Edit Fields2').item.json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "f6e8f739-a1fb-46b4-9f01-1939622a17f9",
+              "name": "Ngày tạo kênh",
+              "value": "={{ new Date($('HTTP Request').item.json.items[0].snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "3ed15d54-433d-4be0-a5ea-3c1bc20cbd8b",
+              "name": "Video URL",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "baf2e4dd-4ae7-4274-83bb-d2a7138c5b85",
+              "name": "Thời điểm đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "09d92b19-f303-4afc-8a39-a67b828c2ef3",
+              "name": "Tháng đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' }).replace('/', '-') }}",
+              "type": "string"
+            },
+            {
+              "id": "d606eec9-0974-4311-be7a-e2c72cd84dad",
+              "name": "Caption video",
+              "value": "={{ $json.snippet.title }}",
+              "type": "string"
+            },
+            {
+              "id": "19b7949e-65a4-4d05-9e2c-98ee6d26c03b",
+              "name": "View",
+              "value": "={{ $json.statistics.viewCount }}",
+              "type": "number"
+            },
+            {
+              "id": "3a6b2927-55a6-4ea9-a404-db23657c6f0d",
+              "name": "Like",
+              "value": "={{ $json.statistics.likeCount }}",
+              "type": "number"
+            },
+            {
+              "id": "0e9bd106-1be8-42fb-9686-4bd2aacc9899",
+              "name": "Comment",
+              "value": "={{ $json.statistics.commentCount }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        140,
+        520
+      ],
+      "id": "2879ccbc-0124-43ef-aa9c-48b197429bad",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3dfb6ce7-0e18-41af-8247-c519c1fa9406",
+              "name": "Team",
+              "value": "Team 1",
+              "type": "string"
+            },
+            {
+              "id": "157f431c-0097-493f-b6f1-0d636fcf0681",
+              "name": "Platform",
+              "value": "Youtube",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1540,
+        660
+      ],
+      "id": "263856a3-053b-414b-ac67-541c1541603a",
+      "name": "Set Team"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8fd3705c-547e-42d1-8041-d81147f344f1",
+              "name": "Team",
+              "value": "={{ $('Set Team').item.json.Team }}",
+              "type": "string"
+            },
+            {
+              "id": "625782ac-c798-422c-80b0-49d5f1e1418e",
+              "name": "Platform",
+              "value": "={{ $('Set Team').item.json.Platform }}",
+              "type": "string"
+            },
+            {
+              "id": "c27e3f19-838f-44e1-aef3-8680b471ae8f",
+              "name": "Tên Kênh",
+              "value": "={{ $json.snippet.channelTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "5e469de9-6c8e-49d4-a76f-45e4bdb44f86",
+              "name": "URL Kênh",
+              "value": "={{ $('Edit Fields').item.json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "f6e8f739-a1fb-46b4-9f01-1939622a17f9",
+              "name": "Ngày tạo kênh",
+              "value": "={{ new Date($('HTTP Request1').item.json.items[0].snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "3ed15d54-433d-4be0-a5ea-3c1bc20cbd8b",
+              "name": "Video URL",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "baf2e4dd-4ae7-4274-83bb-d2a7138c5b85",
+              "name": "Thời điểm đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "09d92b19-f303-4afc-8a39-a67b828c2ef3",
+              "name": "Tháng đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' }).replace('/', '-') }}",
+              "type": "string"
+            },
+            {
+              "id": "d606eec9-0974-4311-be7a-e2c72cd84dad",
+              "name": "Caption video",
+              "value": "={{ $json.snippet.title }}",
+              "type": "string"
+            },
+            {
+              "id": "19b7949e-65a4-4d05-9e2c-98ee6d26c03b",
+              "name": "View",
+              "value": "={{ $json.statistics.viewCount }}",
+              "type": "number"
+            },
+            {
+              "id": "3a6b2927-55a6-4ea9-a404-db23657c6f0d",
+              "name": "Like",
+              "value": "={{ $json.statistics.likeCount }}",
+              "type": "number"
+            },
+            {
+              "id": "0e9bd106-1be8-42fb-9686-4bd2aacc9899",
+              "name": "Comment",
+              "value": "={{ $json.statistics.commentCount }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        140,
+        820
+      ],
+      "id": "3efcded6-d27c-4072-a762-207ed29e3c4d",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "numberInputs": 6
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        660,
+        1700
+      ],
+      "id": "aa0f9591-b051-43ea-b76e-c821e5067bba",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "operation": "getAll",
+        "playlistId": "={{ $json.items[0].contentDetails.relatedPlaylists.uploads }}",
+        "returnAll": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        1140
+      ],
+      "id": "03026d89-2c32-48ac-9127-3c0f9143d392",
+      "name": "YouTube8",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "get",
+        "videoId": "={{ $json.snippet.resourceId.videoId }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        1140
+      ],
+      "id": "47c1cc18-28fc-49ed-be6b-bd39f5f339d8",
+      "name": "YouTube9",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/channels",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "part",
+              "value": "id, snippet,contentDetails"
+            },
+            {
+              "name": "forHandle",
+              "value": "={{ $('Edit Fields9').item.json.url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -640,
+        1140
+      ],
+      "id": "ad0c3a8c-19c6-488f-80aa-51e7758fd3e0",
+      "name": "HTTP Request2",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ff9d6be9-8aac-476f-b0d4-13ed5a90cfe4",
+              "name": "url",
+              "value": "https://www.youtube.com/@bsithuy.ivfphuongdong",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1220,
+        1140
+      ],
+      "id": "61bb0aea-9875-4608-a0f0-edf5a202e620",
+      "name": "Edit Fields8"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "379a8db5-62f2-4549-8c58-99653ff69519",
+                    "leftValue": "={{ $('Edit Fields8').first().json.url }}",
+                    "rightValue": "com/@",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "username"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -880,
+        1140
+      ],
+      "id": "a7f6ad81-48ce-4409-81c6-235c8f6cfe65",
+      "name": "Switch2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "83afefc9-884e-4e7f-8bbd-088a0930bcea",
+              "name": "url",
+              "value": "={{ $json.url.split(\"/\").pop() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1040,
+        1140
+      ],
+      "id": "ed1fd6c8-cdd4-4bc3-9187-8ad67412998c",
+      "name": "Edit Fields9"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3536809e-bfcd-46a8-a58b-d581cbdf271a",
+              "name": "id",
+              "value": "=https://www.youtube.com/watch?v={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        1140
+      ],
+      "id": "2ff48ae9-4ecb-4d36-89c9-51a486ba69cd",
+      "name": "Edit Fields10"
+    },
+    {
+      "parameters": {
+        "content": "## Team 2\n### Bác sĩ Thúy - IVF Phương Đông",
+        "height": 260,
+        "width": 1580
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1300,
+        1040
+      ],
+      "id": "a54dc0d6-e7cf-4864-89b2-be051189f36a",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "operation": "getAll",
+        "playlistId": "={{ $json.items[0].contentDetails.relatedPlaylists.uploads }}",
+        "returnAll": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        1440
+      ],
+      "id": "eb63fa38-ce32-4c6b-9238-79d39627b004",
+      "name": "YouTube1",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "get",
+        "videoId": "={{ $json.snippet.resourceId.videoId }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        1440
+      ],
+      "id": "21c11b8d-fe4c-4a77-821c-d54970a872fe",
+      "name": "YouTube10",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/channels",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "part",
+              "value": "id, snippet,contentDetails"
+            },
+            {
+              "name": "forHandle",
+              "value": "={{ $('Edit Fields12').item.json.url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -640,
+        1440
+      ],
+      "id": "09d726e1-cf6e-4c3c-a2d5-6fc6ec3b0f26",
+      "name": "HTTP Request3",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ff9d6be9-8aac-476f-b0d4-13ed5a90cfe4",
+              "name": "url",
+              "value": "https://www.youtube.com/@bsvuthisen.ivf.phuongdong",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1220,
+        1440
+      ],
+      "id": "7c4eaa7e-1c62-49a8-b0f0-e75f174519d4",
+      "name": "Edit Fields11"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "379a8db5-62f2-4549-8c58-99653ff69519",
+                    "leftValue": "={{ $('Edit Fields11').first().json.url }}",
+                    "rightValue": "com/@",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "username"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -880,
+        1440
+      ],
+      "id": "e2a890f9-0d28-4c3c-b484-4f6019164327",
+      "name": "Switch3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "83afefc9-884e-4e7f-8bbd-088a0930bcea",
+              "name": "url",
+              "value": "={{ $json.url.split(\"/\").pop() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1040,
+        1440
+      ],
+      "id": "ef25da09-91e5-46ab-b3d5-d5c10b564d5c",
+      "name": "Edit Fields12"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3536809e-bfcd-46a8-a58b-d581cbdf271a",
+              "name": "id",
+              "value": "=https://www.youtube.com/watch?v={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        1440
+      ],
+      "id": "dab3fa06-dd0b-4213-bc79-8659a05346ec",
+      "name": "Edit Fields13"
+    },
+    {
+      "parameters": {
+        "content": "## Team 2\n### Bác sĩ Vũ Thị Sen - IVF Phương Đông",
+        "height": 260,
+        "width": 1580
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1300,
+        1340
+      ],
+      "id": "9544cbf8-a34f-40b1-8c88-90e592121a4c",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8fd3705c-547e-42d1-8041-d81147f344f1",
+              "name": "Team",
+              "value": "={{ $('Set Team 2').item.json.Team }}",
+              "type": "string"
+            },
+            {
+              "id": "625782ac-c798-422c-80b0-49d5f1e1418e",
+              "name": "Platform",
+              "value": "={{ $('Set Team 2').item.json.Platform }}",
+              "type": "string"
+            },
+            {
+              "id": "c27e3f19-838f-44e1-aef3-8680b471ae8f",
+              "name": "Tên Kênh",
+              "value": "={{ $json.snippet.channelTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "5e469de9-6c8e-49d4-a76f-45e4bdb44f86",
+              "name": "URL Kênh",
+              "value": "={{ $('Edit Fields8').item.json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "f6e8f739-a1fb-46b4-9f01-1939622a17f9",
+              "name": "Ngày tạo kênh",
+              "value": "={{ new Date($('HTTP Request2').item.json.items[0].snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "3ed15d54-433d-4be0-a5ea-3c1bc20cbd8b",
+              "name": "Video URL",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "baf2e4dd-4ae7-4274-83bb-d2a7138c5b85",
+              "name": "Thời điểm đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "09d92b19-f303-4afc-8a39-a67b828c2ef3",
+              "name": "Tháng đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' }).replace('/', '-') }}",
+              "type": "string"
+            },
+            {
+              "id": "d606eec9-0974-4311-be7a-e2c72cd84dad",
+              "name": "Caption video",
+              "value": "={{ $json.snippet.title }}",
+              "type": "string"
+            },
+            {
+              "id": "19b7949e-65a4-4d05-9e2c-98ee6d26c03b",
+              "name": "View",
+              "value": "={{ $json.statistics.viewCount }}",
+              "type": "number"
+            },
+            {
+              "id": "3a6b2927-55a6-4ea9-a404-db23657c6f0d",
+              "name": "Like",
+              "value": "={{ $json.statistics.likeCount }}",
+              "type": "number"
+            },
+            {
+              "id": "0e9bd106-1be8-42fb-9686-4bd2aacc9899",
+              "name": "Comment",
+              "value": "={{ $json.statistics.commentCount }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        140,
+        1140
+      ],
+      "id": "4d8dd343-c67d-43d4-b428-41d82ea8bbfa",
+      "name": "Edit Fields14"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8fd3705c-547e-42d1-8041-d81147f344f1",
+              "name": "Team",
+              "value": "={{ $('Set Team 2').item.json.Team }}",
+              "type": "string"
+            },
+            {
+              "id": "625782ac-c798-422c-80b0-49d5f1e1418e",
+              "name": "Platform",
+              "value": "={{ $('Set Team 2').item.json.Platform }}",
+              "type": "string"
+            },
+            {
+              "id": "c27e3f19-838f-44e1-aef3-8680b471ae8f",
+              "name": "Tên Kênh",
+              "value": "={{ $json.snippet.channelTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "5e469de9-6c8e-49d4-a76f-45e4bdb44f86",
+              "name": "URL Kênh",
+              "value": "={{ $('Edit Fields11').item.json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "f6e8f739-a1fb-46b4-9f01-1939622a17f9",
+              "name": "Ngày tạo kênh",
+              "value": "={{ new Date($('HTTP Request3').item.json.items[0].snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "3ed15d54-433d-4be0-a5ea-3c1bc20cbd8b",
+              "name": "Video URL",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "baf2e4dd-4ae7-4274-83bb-d2a7138c5b85",
+              "name": "Thời điểm đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "09d92b19-f303-4afc-8a39-a67b828c2ef3",
+              "name": "Tháng đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' }).replace('/', '-') }}",
+              "type": "string"
+            },
+            {
+              "id": "d606eec9-0974-4311-be7a-e2c72cd84dad",
+              "name": "Caption video",
+              "value": "={{ $json.snippet.title }}",
+              "type": "string"
+            },
+            {
+              "id": "19b7949e-65a4-4d05-9e2c-98ee6d26c03b",
+              "name": "View",
+              "value": "={{ $json.statistics.viewCount }}",
+              "type": "number"
+            },
+            {
+              "id": "3a6b2927-55a6-4ea9-a404-db23657c6f0d",
+              "name": "Like",
+              "value": "={{ $json.statistics.likeCount }}",
+              "type": "number"
+            },
+            {
+              "id": "0e9bd106-1be8-42fb-9686-4bd2aacc9899",
+              "name": "Comment",
+              "value": "={{ $json.statistics.commentCount }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        140,
+        1440
+      ],
+      "id": "5d42ba70-70ed-4716-94e8-c039b4caa9f0",
+      "name": "Edit Fields15"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3dfb6ce7-0e18-41af-8247-c519c1fa9406",
+              "name": "Team",
+              "value": "Team 2",
+              "type": "string"
+            },
+            {
+              "id": "157f431c-0097-493f-b6f1-0d636fcf0681",
+              "name": "Platform",
+              "value": "Youtube",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1540,
+        1280
+      ],
+      "id": "646561fd-c811-4692-8ece-c47ea653a991",
+      "name": "Set Team 2"
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "operation": "getAll",
+        "playlistId": "={{ $json.items[0].contentDetails.relatedPlaylists.uploads }}",
+        "returnAll": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        1740
+      ],
+      "id": "d90fe83f-d88c-4f2b-ba3a-13952878bf2f",
+      "name": "YouTube11",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "get",
+        "videoId": "={{ $json.snippet.resourceId.videoId }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        1740
+      ],
+      "id": "d143ec3f-ae50-44c2-bf16-db2b8bad7dc9",
+      "name": "YouTube12",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/channels",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "part",
+              "value": "id, snippet,contentDetails"
+            },
+            {
+              "name": "forHandle",
+              "value": "={{ $('Edit Fields17').item.json.url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -640,
+        1740
+      ],
+      "id": "433f2e4d-5315-4ccf-8fe6-49b735f0382e",
+      "name": "HTTP Request4",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ff9d6be9-8aac-476f-b0d4-13ed5a90cfe4",
+              "name": "url",
+              "value": "https://youtube.com/@bacsihaiduy-ivfphuongdong",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1220,
+        1740
+      ],
+      "id": "2abbe889-3481-4d30-9135-09c1be164a4f",
+      "name": "Edit Fields16"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "379a8db5-62f2-4549-8c58-99653ff69519",
+                    "leftValue": "={{ $('Edit Fields16').first().json.url }}",
+                    "rightValue": "com/@",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "username"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -880,
+        1740
+      ],
+      "id": "8a8cdf03-1ba5-4e05-8974-eb151d8875d8",
+      "name": "Switch4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "83afefc9-884e-4e7f-8bbd-088a0930bcea",
+              "name": "url",
+              "value": "={{ $json.url.split(\"/\").pop() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1040,
+        1740
+      ],
+      "id": "1ad0dd64-1acf-4dc9-a09e-e949f9841544",
+      "name": "Edit Fields17"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3536809e-bfcd-46a8-a58b-d581cbdf271a",
+              "name": "id",
+              "value": "=https://www.youtube.com/watch?v={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        1740
+      ],
+      "id": "f2e01008-d7a0-4dcb-b117-ec9f057f8dd8",
+      "name": "Edit Fields18"
+    },
+    {
+      "parameters": {
+        "content": "## Team 3\n### Bác sĩ Hải Duy - IVF Phương Đông",
+        "height": 260,
+        "width": 1580
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1300,
+        1640
+      ],
+      "id": "24c8406a-0ed5-4b46-ad95-3d0e34ab28eb",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8fd3705c-547e-42d1-8041-d81147f344f1",
+              "name": "Team",
+              "value": "={{ $('Set Team 3').item.json.Team }}",
+              "type": "string"
+            },
+            {
+              "id": "625782ac-c798-422c-80b0-49d5f1e1418e",
+              "name": "Platform",
+              "value": "={{ $('Set Team 3').item.json.Platform }}",
+              "type": "string"
+            },
+            {
+              "id": "c27e3f19-838f-44e1-aef3-8680b471ae8f",
+              "name": "Tên Kênh",
+              "value": "={{ $json.snippet.channelTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "5e469de9-6c8e-49d4-a76f-45e4bdb44f86",
+              "name": "URL Kênh",
+              "value": "={{ $('Edit Fields16').item.json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "f6e8f739-a1fb-46b4-9f01-1939622a17f9",
+              "name": "Ngày tạo kênh",
+              "value": "={{ new Date($('HTTP Request4').item.json.items[0].snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "3ed15d54-433d-4be0-a5ea-3c1bc20cbd8b",
+              "name": "Video URL",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "baf2e4dd-4ae7-4274-83bb-d2a7138c5b85",
+              "name": "Thời điểm đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "09d92b19-f303-4afc-8a39-a67b828c2ef3",
+              "name": "Tháng đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' }).replace('/', '-') }}",
+              "type": "string"
+            },
+            {
+              "id": "d606eec9-0974-4311-be7a-e2c72cd84dad",
+              "name": "Caption video",
+              "value": "={{ $json.snippet.title }}",
+              "type": "string"
+            },
+            {
+              "id": "19b7949e-65a4-4d05-9e2c-98ee6d26c03b",
+              "name": "View",
+              "value": "={{ $json.statistics.viewCount }}",
+              "type": "number"
+            },
+            {
+              "id": "3a6b2927-55a6-4ea9-a404-db23657c6f0d",
+              "name": "Like",
+              "value": "={{ $json.statistics.likeCount }}",
+              "type": "number"
+            },
+            {
+              "id": "0e9bd106-1be8-42fb-9686-4bd2aacc9899",
+              "name": "Comment",
+              "value": "={{ $json.statistics.commentCount }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        140,
+        1740
+      ],
+      "id": "c3c9f684-2e69-45b4-912d-d96dff22fd32",
+      "name": "Edit Fields22"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3dfb6ce7-0e18-41af-8247-c519c1fa9406",
+              "name": "Team",
+              "value": "Team 3",
+              "type": "string"
+            },
+            {
+              "id": "157f431c-0097-493f-b6f1-0d636fcf0681",
+              "name": "Platform",
+              "value": "Youtube",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1540,
+        1740
+      ],
+      "id": "a0c26793-5f7e-4866-a1f1-737979c57344",
+      "name": "Set Team 3"
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "operation": "getAll",
+        "playlistId": "={{ $json.items[0].contentDetails.relatedPlaylists.uploads }}",
+        "returnAll": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        2040
+      ],
+      "id": "dddc11b2-07a9-4045-af99-ff189f6002d4",
+      "name": "YouTube13",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "get",
+        "videoId": "={{ $json.snippet.resourceId.videoId }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        2040
+      ],
+      "id": "9a144be5-9bba-495f-8cda-b3f1a809d867",
+      "name": "YouTube14",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/channels",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "part",
+              "value": "id, snippet,contentDetails"
+            },
+            {
+              "name": "forHandle",
+              "value": "={{ $('Edit Fields20').item.json.url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -640,
+        2040
+      ],
+      "id": "3f952e2a-c0a2-4d43-86dc-d55b72428e86",
+      "name": "HTTP Request5",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ff9d6be9-8aac-476f-b0d4-13ed5a90cfe4",
+              "name": "url",
+              "value": "https://www.youtube.com/@thsbsdoandumanh",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1220,
+        2040
+      ],
+      "id": "d887f9c4-6bfa-4626-bcae-ce4ef759a440",
+      "name": "Edit Fields19"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "379a8db5-62f2-4549-8c58-99653ff69519",
+                    "leftValue": "={{ $('Edit Fields19').first().json.url }}",
+                    "rightValue": "com/@",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "username"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -880,
+        2040
+      ],
+      "id": "a1168a19-3202-4e05-995f-85b13307040e",
+      "name": "Switch5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "83afefc9-884e-4e7f-8bbd-088a0930bcea",
+              "name": "url",
+              "value": "={{ $json.url.split(\"/\").pop() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1040,
+        2040
+      ],
+      "id": "961de449-5028-470e-892a-117d2c628372",
+      "name": "Edit Fields20"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3536809e-bfcd-46a8-a58b-d581cbdf271a",
+              "name": "id",
+              "value": "=https://www.youtube.com/watch?v={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        2040
+      ],
+      "id": "4cdde9c5-64cf-496a-b396-8940f2970305",
+      "name": "Edit Fields21"
+    },
+    {
+      "parameters": {
+        "content": "## Team 5\n### Thạc sĩ, Bác sĩ Đoàn Dư Mạnh",
+        "height": 260,
+        "width": 1580
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1300,
+        1940
+      ],
+      "id": "f506bbce-73a8-46c5-92e5-6e35387e00ce",
+      "name": "Sticky Note5"
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "operation": "getAll",
+        "playlistId": "={{ $json.items[0].contentDetails.relatedPlaylists.uploads }}",
+        "returnAll": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        2340
+      ],
+      "id": "c9e6a94a-e8ae-4086-a7e8-a9ec12e693e9",
+      "name": "YouTube2",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "get",
+        "videoId": "={{ $json.snippet.resourceId.videoId }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        2340
+      ],
+      "id": "7411a97a-04df-4501-b4f4-f8a7fbbae97c",
+      "name": "YouTube15",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/channels",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "part",
+              "value": "id, snippet,contentDetails"
+            },
+            {
+              "name": "forHandle",
+              "value": "={{ $('Edit Fields24').item.json.url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -640,
+        2340
+      ],
+      "id": "e4d21e64-868d-4f80-840c-d2f9b3cdb744",
+      "name": "HTTP Request6",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ff9d6be9-8aac-476f-b0d4-13ed5a90cfe4",
+              "name": "url",
+              "value": "https://www.youtube.com/@nganhangmophuongdong",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1220,
+        2340
+      ],
+      "id": "d92cf95a-17f3-48c6-8c26-b0e2e7050802",
+      "name": "Edit Fields23"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "379a8db5-62f2-4549-8c58-99653ff69519",
+                    "leftValue": "={{ $('Edit Fields23').first().json.url }}",
+                    "rightValue": "com/@",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "username"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -880,
+        2340
+      ],
+      "id": "50772f96-a91c-4c7b-a696-2051890382c4",
+      "name": "Switch6"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "83afefc9-884e-4e7f-8bbd-088a0930bcea",
+              "name": "url",
+              "value": "={{ $json.url.split(\"/\").pop() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1040,
+        2340
+      ],
+      "id": "dd8830ab-1237-4462-97b1-17ffe61b86ac",
+      "name": "Edit Fields24"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3536809e-bfcd-46a8-a58b-d581cbdf271a",
+              "name": "id",
+              "value": "=https://www.youtube.com/watch?v={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        2340
+      ],
+      "id": "4a4255c7-399e-40f9-a382-a04f4b51e3f7",
+      "name": "Edit Fields25"
+    },
+    {
+      "parameters": {
+        "content": "## Team 5\n### Ngân Hàng Mô Phương Đông",
+        "height": 260,
+        "width": 1580
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1300,
+        2240
+      ],
+      "id": "ba037637-f8c4-47cd-b56c-09a8b8c9c9bc",
+      "name": "Sticky Note6"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8fd3705c-547e-42d1-8041-d81147f344f1",
+              "name": "Team",
+              "value": "={{ $('Set Team 5').item.json.Team }}",
+              "type": "string"
+            },
+            {
+              "id": "625782ac-c798-422c-80b0-49d5f1e1418e",
+              "name": "Platform",
+              "value": "={{ $('Set Team 5').item.json.Platform }}",
+              "type": "string"
+            },
+            {
+              "id": "c27e3f19-838f-44e1-aef3-8680b471ae8f",
+              "name": "Tên Kênh",
+              "value": "={{ $json.snippet.channelTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "5e469de9-6c8e-49d4-a76f-45e4bdb44f86",
+              "name": "URL Kênh",
+              "value": "={{ $('Edit Fields19').item.json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "f6e8f739-a1fb-46b4-9f01-1939622a17f9",
+              "name": "Ngày tạo kênh",
+              "value": "={{ new Date($('HTTP Request5').item.json.items[0].snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "3ed15d54-433d-4be0-a5ea-3c1bc20cbd8b",
+              "name": "Video URL",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "baf2e4dd-4ae7-4274-83bb-d2a7138c5b85",
+              "name": "Thời điểm đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "09d92b19-f303-4afc-8a39-a67b828c2ef3",
+              "name": "Tháng đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' }).replace('/', '-') }}",
+              "type": "string"
+            },
+            {
+              "id": "d606eec9-0974-4311-be7a-e2c72cd84dad",
+              "name": "Caption video",
+              "value": "={{ $json.snippet.title }}",
+              "type": "string"
+            },
+            {
+              "id": "19b7949e-65a4-4d05-9e2c-98ee6d26c03b",
+              "name": "View",
+              "value": "={{ $json.statistics.viewCount }}",
+              "type": "number"
+            },
+            {
+              "id": "3a6b2927-55a6-4ea9-a404-db23657c6f0d",
+              "name": "Like",
+              "value": "={{ $json.statistics.likeCount }}",
+              "type": "number"
+            },
+            {
+              "id": "0e9bd106-1be8-42fb-9686-4bd2aacc9899",
+              "name": "Comment",
+              "value": "={{ $json.statistics.commentCount }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        140,
+        2040
+      ],
+      "id": "f237601d-a2d5-4980-8d0e-df34186ced28",
+      "name": "Edit Fields26"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8fd3705c-547e-42d1-8041-d81147f344f1",
+              "name": "Team",
+              "value": "={{ $('Set Team 5').item.json.Team }}",
+              "type": "string"
+            },
+            {
+              "id": "625782ac-c798-422c-80b0-49d5f1e1418e",
+              "name": "Platform",
+              "value": "={{ $('Set Team 5').item.json.Platform }}",
+              "type": "string"
+            },
+            {
+              "id": "c27e3f19-838f-44e1-aef3-8680b471ae8f",
+              "name": "Tên Kênh",
+              "value": "={{ $json.snippet.channelTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "5e469de9-6c8e-49d4-a76f-45e4bdb44f86",
+              "name": "URL Kênh",
+              "value": "={{ $('Edit Fields23').item.json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "f6e8f739-a1fb-46b4-9f01-1939622a17f9",
+              "name": "Ngày tạo kênh",
+              "value": "={{ new Date($('HTTP Request6').item.json.items[0].snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "3ed15d54-433d-4be0-a5ea-3c1bc20cbd8b",
+              "name": "Video URL",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "baf2e4dd-4ae7-4274-83bb-d2a7138c5b85",
+              "name": "Thời điểm đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "09d92b19-f303-4afc-8a39-a67b828c2ef3",
+              "name": "Tháng đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' }).replace('/', '-') }}",
+              "type": "string"
+            },
+            {
+              "id": "d606eec9-0974-4311-be7a-e2c72cd84dad",
+              "name": "Caption video",
+              "value": "={{ $json.snippet.title }}",
+              "type": "string"
+            },
+            {
+              "id": "19b7949e-65a4-4d05-9e2c-98ee6d26c03b",
+              "name": "View",
+              "value": "={{ $json.statistics.viewCount }}",
+              "type": "number"
+            },
+            {
+              "id": "3a6b2927-55a6-4ea9-a404-db23657c6f0d",
+              "name": "Like",
+              "value": "={{ $json.statistics.likeCount }}",
+              "type": "number"
+            },
+            {
+              "id": "0e9bd106-1be8-42fb-9686-4bd2aacc9899",
+              "name": "Comment",
+              "value": "={{ $json.statistics.commentCount }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        140,
+        2340
+      ],
+      "id": "61b374fd-485f-405d-9ab1-0276a50c68fb",
+      "name": "Edit Fields27"
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "operation": "getAll",
+        "playlistId": "={{ $json.items[0].contentDetails.relatedPlaylists.uploads }}",
+        "returnAll": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        2960
+      ],
+      "id": "f6a3c736-12ae-49f9-bb22-71c247ecfa11",
+      "name": "YouTube16",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "get",
+        "videoId": "={{ $json.snippet.resourceId.videoId }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        2960
+      ],
+      "id": "5ba17137-c437-4596-aad6-05959c159485",
+      "name": "YouTube17",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/channels",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "part",
+              "value": "id, snippet,contentDetails"
+            },
+            {
+              "name": "forHandle",
+              "value": "={{ $('Edit Fields29').item.json.url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -640,
+        2960
+      ],
+      "id": "f55e01ca-ffb7-4191-a6ff-58bca8e39f62",
+      "name": "HTTP Request7",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ff9d6be9-8aac-476f-b0d4-13ed5a90cfe4",
+              "name": "url",
+              "value": "https://www.youtube.com/@thacsibacsinguyentuandung",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1220,
+        2960
+      ],
+      "id": "e11a673c-42b0-49d6-900a-da0e840d9586",
+      "name": "Edit Fields28"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "379a8db5-62f2-4549-8c58-99653ff69519",
+                    "leftValue": "={{ $('Edit Fields28').first().json.url }}",
+                    "rightValue": "com/@",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "username"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -880,
+        2960
+      ],
+      "id": "7e34341e-946b-4811-abb7-65e438f2d064",
+      "name": "Switch7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "83afefc9-884e-4e7f-8bbd-088a0930bcea",
+              "name": "url",
+              "value": "={{ $json.url.split(\"/\").pop() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1040,
+        2960
+      ],
+      "id": "dd34f695-80b8-43bc-aa9e-7a01401c3784",
+      "name": "Edit Fields29"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3536809e-bfcd-46a8-a58b-d581cbdf271a",
+              "name": "id",
+              "value": "=https://www.youtube.com/watch?v={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        2960
+      ],
+      "id": "5f8e7340-6f38-4e19-a3be-afcb60f2ec78",
+      "name": "Edit Fields30"
+    },
+    {
+      "parameters": {
+        "content": "## Team Cộng đồng\n### Thạc sĩ, Bác sĩ Nguyễn Tuấn Dũng",
+        "height": 260,
+        "width": 1580
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1300,
+        2860
+      ],
+      "id": "3c809d16-93e1-496e-9066-8ab6b17e06fc",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8fd3705c-547e-42d1-8041-d81147f344f1",
+              "name": "Team",
+              "value": "={{ $('Set Team Cộng đồng').item.json.Team }}",
+              "type": "string"
+            },
+            {
+              "id": "625782ac-c798-422c-80b0-49d5f1e1418e",
+              "name": "Platform",
+              "value": "={{ $('Set Team Cộng đồng').item.json.Platform }}",
+              "type": "string"
+            },
+            {
+              "id": "c27e3f19-838f-44e1-aef3-8680b471ae8f",
+              "name": "Tên Kênh",
+              "value": "={{ $json.snippet.channelTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "5e469de9-6c8e-49d4-a76f-45e4bdb44f86",
+              "name": "URL Kênh",
+              "value": "={{ $('Edit Fields28').item.json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "f6e8f739-a1fb-46b4-9f01-1939622a17f9",
+              "name": "Ngày tạo kênh",
+              "value": "={{ new Date($('HTTP Request7').item.json.items[0].snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "3ed15d54-433d-4be0-a5ea-3c1bc20cbd8b",
+              "name": "Video URL",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "baf2e4dd-4ae7-4274-83bb-d2a7138c5b85",
+              "name": "Thời điểm đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "09d92b19-f303-4afc-8a39-a67b828c2ef3",
+              "name": "Tháng đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' }).replace('/', '-') }}",
+              "type": "string"
+            },
+            {
+              "id": "d606eec9-0974-4311-be7a-e2c72cd84dad",
+              "name": "Caption video",
+              "value": "={{ $json.snippet.title }}",
+              "type": "string"
+            },
+            {
+              "id": "19b7949e-65a4-4d05-9e2c-98ee6d26c03b",
+              "name": "View",
+              "value": "={{ $json.statistics.viewCount }}",
+              "type": "number"
+            },
+            {
+              "id": "3a6b2927-55a6-4ea9-a404-db23657c6f0d",
+              "name": "Like",
+              "value": "={{ $json.statistics.likeCount }}",
+              "type": "number"
+            },
+            {
+              "id": "0e9bd106-1be8-42fb-9686-4bd2aacc9899",
+              "name": "Comment",
+              "value": "={{ $json.statistics.commentCount }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        140,
+        2960
+      ],
+      "id": "91d43d29-0c8d-4535-8598-0941b77dc642",
+      "name": "Edit Fields31"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3dfb6ce7-0e18-41af-8247-c519c1fa9406",
+              "name": "Team",
+              "value": "Team 5",
+              "type": "string"
+            },
+            {
+              "id": "157f431c-0097-493f-b6f1-0d636fcf0681",
+              "name": "Platform",
+              "value": "Youtube",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1540,
+        2180
+      ],
+      "id": "41226853-c6c9-4f1d-8b73-7c29214ddec3",
+      "name": "Set Team 5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3dfb6ce7-0e18-41af-8247-c519c1fa9406",
+              "name": "Team",
+              "value": "Team Cộng đồng",
+              "type": "string"
+            },
+            {
+              "id": "157f431c-0097-493f-b6f1-0d636fcf0681",
+              "name": "Platform",
+              "value": "Youtube",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1540,
+        2960
+      ],
+      "id": "71faf0c8-24da-4db5-a730-16ca45063447",
+      "name": "Set Team Cộng đồng"
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "operation": "getAll",
+        "playlistId": "={{ $json.items[0].contentDetails.relatedPlaylists.uploads }}",
+        "returnAll": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        3260
+      ],
+      "id": "b33bfa4f-50b6-4b27-9d0f-11312dd50cd3",
+      "name": "YouTube18",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "get",
+        "videoId": "={{ $json.snippet.resourceId.videoId }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        3260
+      ],
+      "id": "dca1eea2-ef09-4a66-904a-fbec5dcb0523",
+      "name": "YouTube19",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/channels",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "part",
+              "value": "id, snippet,contentDetails"
+            },
+            {
+              "name": "forHandle",
+              "value": "={{ $('Edit Fields33').item.json.url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -640,
+        3260
+      ],
+      "id": "6307419f-fabd-4810-8dac-a8495c35e855",
+      "name": "HTTP Request8",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ff9d6be9-8aac-476f-b0d4-13ed5a90cfe4",
+              "name": "url",
+              "value": "https://www.youtube.com/@BSLeQuangDao",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1220,
+        3260
+      ],
+      "id": "ba70da0f-0239-4c4e-bac3-7d952c7c74b0",
+      "name": "Edit Fields32"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "379a8db5-62f2-4549-8c58-99653ff69519",
+                    "leftValue": "={{ $('Edit Fields32').first().json.url }}",
+                    "rightValue": "com/@",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "username"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -880,
+        3260
+      ],
+      "id": "befa5c17-0b95-4347-b33c-4b72c96e9a32",
+      "name": "Switch8"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "83afefc9-884e-4e7f-8bbd-088a0930bcea",
+              "name": "url",
+              "value": "={{ $json.url.split(\"/\").pop() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1040,
+        3260
+      ],
+      "id": "6b760491-62b6-4bb8-9840-751d628d7166",
+      "name": "Edit Fields33"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3536809e-bfcd-46a8-a58b-d581cbdf271a",
+              "name": "id",
+              "value": "=https://www.youtube.com/watch?v={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        3260
+      ],
+      "id": "a394df0d-ba1c-4e2d-ba36-7ae7dbadb662",
+      "name": "Edit Fields34"
+    },
+    {
+      "parameters": {
+        "content": "## Team SEO\n### BS Lê Quang Đạo",
+        "height": 260,
+        "width": 1580
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1300,
+        3160
+      ],
+      "id": "23890650-db5b-46ac-9793-c82cba47135e",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8fd3705c-547e-42d1-8041-d81147f344f1",
+              "name": "Team",
+              "value": "={{ $('Set Team SEO').item.json.Team }}",
+              "type": "string"
+            },
+            {
+              "id": "625782ac-c798-422c-80b0-49d5f1e1418e",
+              "name": "Platform",
+              "value": "={{ $('Set Team SEO').item.json.Platform }}",
+              "type": "string"
+            },
+            {
+              "id": "c27e3f19-838f-44e1-aef3-8680b471ae8f",
+              "name": "Tên Kênh",
+              "value": "={{ $json.snippet.channelTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "5e469de9-6c8e-49d4-a76f-45e4bdb44f86",
+              "name": "URL Kênh",
+              "value": "={{ $('Edit Fields32').item.json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "f6e8f739-a1fb-46b4-9f01-1939622a17f9",
+              "name": "Ngày tạo kênh",
+              "value": "={{ new Date($('HTTP Request8').item.json.items[0].snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "3ed15d54-433d-4be0-a5ea-3c1bc20cbd8b",
+              "name": "Video URL",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "baf2e4dd-4ae7-4274-83bb-d2a7138c5b85",
+              "name": "Thời điểm đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "09d92b19-f303-4afc-8a39-a67b828c2ef3",
+              "name": "Tháng đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' }).replace('/', '-') }}",
+              "type": "string"
+            },
+            {
+              "id": "d606eec9-0974-4311-be7a-e2c72cd84dad",
+              "name": "Caption video",
+              "value": "={{ $json.snippet.title }}",
+              "type": "string"
+            },
+            {
+              "id": "19b7949e-65a4-4d05-9e2c-98ee6d26c03b",
+              "name": "View",
+              "value": "={{ $json.statistics.viewCount }}",
+              "type": "number"
+            },
+            {
+              "id": "3a6b2927-55a6-4ea9-a404-db23657c6f0d",
+              "name": "Like",
+              "value": "={{ $json.statistics.likeCount }}",
+              "type": "number"
+            },
+            {
+              "id": "0e9bd106-1be8-42fb-9686-4bd2aacc9899",
+              "name": "Comment",
+              "value": "={{ $json.statistics.commentCount }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        140,
+        3260
+      ],
+      "id": "e8a5cde7-31be-4b96-ab82-ff5c70ba83bf",
+      "name": "Edit Fields35"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3dfb6ce7-0e18-41af-8247-c519c1fa9406",
+              "name": "Team",
+              "value": "Team SEO",
+              "type": "string"
+            },
+            {
+              "id": "157f431c-0097-493f-b6f1-0d636fcf0681",
+              "name": "Platform",
+              "value": "Youtube",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1540,
+        3260
+      ],
+      "id": "82e8b0dd-ec50-40b4-b293-395fd7699a33",
+      "name": "Set Team SEO"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "17cnmrpZLq5f5nAzg_L9zC6ivpaG2CohavSDwC-PBLX8",
+          "mode": "list",
+          "cachedResultName": "View_tổng",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17cnmrpZLq5f5nAzg_L9zC6ivpaG2CohavSDwC-PBLX8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 7439467,
+          "mode": "list",
+          "cachedResultName": "Youtube",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17cnmrpZLq5f5nAzg_L9zC6ivpaG2CohavSDwC-PBLX8/edit#gid=7439467"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        960,
+        1760
+      ],
+      "id": "ebd2e1b6-df62-459b-9b9d-37293d923e2c",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "a14sulDMEk1PkTl9",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "operation": "getAll",
+        "playlistId": "={{ $json.items[0].contentDetails.relatedPlaylists.uploads }}",
+        "returnAll": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        2660
+      ],
+      "id": "99f52a88-874d-4b2f-aa73-331fa74f7bb0",
+      "name": "YouTube3",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "get",
+        "videoId": "={{ $json.snippet.resourceId.videoId }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        -280,
+        2660
+      ],
+      "id": "5313a872-73cd-42a3-88fc-418f3a8af94e",
+      "name": "YouTube20",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/youtube/v3/channels",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "part",
+              "value": "id, snippet,contentDetails"
+            },
+            {
+              "name": "forHandle",
+              "value": "={{ $('Edit Fields37').item.json.url }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -640,
+        2660
+      ],
+      "id": "50d1c0fb-05bb-40c5-a4d3-96081b7f9c48",
+      "name": "HTTP Request9",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "K324S3DHLPIk5AAj",
+          "name": "YouTube account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ff9d6be9-8aac-476f-b0d4-13ed5a90cfe4",
+              "name": "url",
+              "value": "https://www.youtube.com/@Bsninhcongvixatri",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1220,
+        2660
+      ],
+      "id": "d83a1b58-3d3c-4afe-b108-8e5bebdaa9d1",
+      "name": "Edit Fields36"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "379a8db5-62f2-4549-8c58-99653ff69519",
+                    "leftValue": "={{ $('Edit Fields36').first().json.url }}",
+                    "rightValue": "com/@",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "username"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -880,
+        2660
+      ],
+      "id": "ff7a35c1-aa9f-4bd4-92ff-6968112f741d",
+      "name": "Switch9"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "83afefc9-884e-4e7f-8bbd-088a0930bcea",
+              "name": "url",
+              "value": "={{ $json.url.split(\"/\").pop() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1040,
+        2660
+      ],
+      "id": "faf5135d-3a26-4c12-8e1b-8cde15e656db",
+      "name": "Edit Fields37"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "3536809e-bfcd-46a8-a58b-d581cbdf271a",
+              "name": "id",
+              "value": "=https://www.youtube.com/watch?v={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -80,
+        2660
+      ],
+      "id": "5262ae0b-5078-4776-beea-cf477941a222",
+      "name": "Edit Fields38"
+    },
+    {
+      "parameters": {
+        "content": "## Team 5\n### BS Vi",
+        "height": 260,
+        "width": 1580
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1300,
+        2560
+      ],
+      "id": "48655c9b-7e86-4b23-8a03-0bae75e839bd",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8fd3705c-547e-42d1-8041-d81147f344f1",
+              "name": "Team",
+              "value": "={{ $('Set Team 5').item.json.Team }}",
+              "type": "string"
+            },
+            {
+              "id": "625782ac-c798-422c-80b0-49d5f1e1418e",
+              "name": "Platform",
+              "value": "={{ $('Set Team 5').item.json.Platform }}",
+              "type": "string"
+            },
+            {
+              "id": "c27e3f19-838f-44e1-aef3-8680b471ae8f",
+              "name": "Tên Kênh",
+              "value": "={{ $json.snippet.channelTitle }}",
+              "type": "string"
+            },
+            {
+              "id": "5e469de9-6c8e-49d4-a76f-45e4bdb44f86",
+              "name": "URL Kênh",
+              "value": "={{ $('Edit Fields36').item.json.url }}",
+              "type": "string"
+            },
+            {
+              "id": "f6e8f739-a1fb-46b4-9f01-1939622a17f9",
+              "name": "Ngày tạo kênh",
+              "value": "={{ new Date($('HTTP Request9').item.json.items[0].snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "3ed15d54-433d-4be0-a5ea-3c1bc20cbd8b",
+              "name": "Video URL",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "baf2e4dd-4ae7-4274-83bb-d2a7138c5b85",
+              "name": "Thời điểm đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB') }}",
+              "type": "string"
+            },
+            {
+              "id": "09d92b19-f303-4afc-8a39-a67b828c2ef3",
+              "name": "Tháng đăng video",
+              "value": "={{ new Date($json.snippet.publishedAt).toLocaleDateString('en-GB', { month: '2-digit', year: 'numeric' }).replace('/', '-') }}",
+              "type": "string"
+            },
+            {
+              "id": "d606eec9-0974-4311-be7a-e2c72cd84dad",
+              "name": "Caption video",
+              "value": "={{ $json.snippet.title }}",
+              "type": "string"
+            },
+            {
+              "id": "19b7949e-65a4-4d05-9e2c-98ee6d26c03b",
+              "name": "View",
+              "value": "={{ $json.statistics.viewCount }}",
+              "type": "number"
+            },
+            {
+              "id": "3a6b2927-55a6-4ea9-a404-db23657c6f0d",
+              "name": "Like",
+              "value": "={{ $json.statistics.likeCount }}",
+              "type": "number"
+            },
+            {
+              "id": "0e9bd106-1be8-42fb-9686-4bd2aacc9899",
+              "name": "Comment",
+              "value": "={{ $json.statistics.commentCount }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        140,
+        2660
+      ],
+      "id": "bb243e68-8d77-4711-950c-b2924f813a76",
+      "name": "Edit Fields39"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        360,
+        640
+      ],
+      "id": "c1b2d76d-6d9f-4024-8844-0e0b6d77c876",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        360,
+        1280
+      ],
+      "id": "68b3913a-7532-4a1f-911c-120f2d043de0",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        380,
+        2340
+      ],
+      "id": "588ad725-5b0f-455c-a507-6b3850cfea76",
+      "name": "Merge3"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set Team",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set Team 2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set Team 3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set Team 5",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set Team Cộng đồng",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Set Team SEO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube5": {
+      "main": [
+        [
+          {
+            "node": "YouTube6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube6": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "YouTube5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube": {
+      "main": [
+        [
+          {
+            "node": "YouTube7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube7": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "YouTube",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Team": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "YouTube8": {
+      "main": [
+        [
+          {
+            "node": "YouTube9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube9": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "YouTube8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields8": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields9": {
+      "main": [
+        [
+          {
+            "node": "Switch2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields10": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube1": {
+      "main": [
+        [
+          {
+            "node": "YouTube10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube10": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "YouTube1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields11": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields12": {
+      "main": [
+        [
+          {
+            "node": "Switch3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields13": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields15",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Team 2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields8",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields14": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields15": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "YouTube11": {
+      "main": [
+        [
+          {
+            "node": "YouTube12",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube12": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields18",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request4": {
+      "main": [
+        [
+          {
+            "node": "YouTube11",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields16": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields17",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch4": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields17": {
+      "main": [
+        [
+          {
+            "node": "Switch4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields18": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields22",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Team 3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields16",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields22": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "YouTube13": {
+      "main": [
+        [
+          {
+            "node": "YouTube14",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube14": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields21",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request5": {
+      "main": [
+        [
+          {
+            "node": "YouTube13",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields19": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch5": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields20": {
+      "main": [
+        [
+          {
+            "node": "Switch5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields21": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields26",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube2": {
+      "main": [
+        [
+          {
+            "node": "YouTube15",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube15": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields25",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request6": {
+      "main": [
+        [
+          {
+            "node": "YouTube2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields23": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields24",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch6": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields24": {
+      "main": [
+        [
+          {
+            "node": "Switch6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields25": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields27",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube16": {
+      "main": [
+        [
+          {
+            "node": "YouTube17",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube17": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields30",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request7": {
+      "main": [
+        [
+          {
+            "node": "YouTube16",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields28": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields29",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch7": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields29": {
+      "main": [
+        [
+          {
+            "node": "Switch7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields30": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields31",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Team 5": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields19",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields23",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Edit Fields36",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Team Cộng đồng": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields28",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube18": {
+      "main": [
+        [
+          {
+            "node": "YouTube19",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube19": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields34",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request8": {
+      "main": [
+        [
+          {
+            "node": "YouTube18",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields32": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields33",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch8": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields33": {
+      "main": [
+        [
+          {
+            "node": "Switch8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields34": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields35",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Team SEO": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields32",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields26": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields27": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Edit Fields31": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 4
+          }
+        ]
+      ]
+    },
+    "Edit Fields35": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 5
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube3": {
+      "main": [
+        [
+          {
+            "node": "YouTube20",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "YouTube20": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields38",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request9": {
+      "main": [
+        [
+          {
+            "node": "YouTube3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields36": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields37",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch9": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields37": {
+      "main": [
+        [
+          {
+            "node": "Switch9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields38": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields39",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields39": {
+      "main": [
+        [
+          {
+            "node": "Merge3",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge3": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a4885a31-37d8-41f1-99bd-4dc2e16dc3c5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c0751754e5fba42ed05a61542eda960715d62bf9a01b491518dfeeb287b1523a"
+  },
+  "id": "hKqqCou2UlcAQgmG",
+  "tags": []
+}
