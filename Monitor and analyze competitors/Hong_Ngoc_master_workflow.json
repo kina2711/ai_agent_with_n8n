@@ -1,0 +1,536 @@
+{
+  "name": "Hồng Ngọc",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1000,
+        40
+      ],
+      "id": "3999c5b1-bb9e-4c75-924b-23e7f9011ce7",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "name": "Tavily_Tool",
+        "description": "Call this tool to get latest news about the company by inserting Competitors company title only.",
+        "workflowId": {
+          "__rl": true,
+          "value": "87Y5RBWjopQaIDvV",
+          "mode": "list",
+          "cachedResultName": "CPTavily-HongNgoc"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        -400,
+        660
+      ],
+      "id": "224083e2-9254-437a-8e40-1eec937e3754",
+      "name": "Tavily Tool"
+    },
+    {
+      "parameters": {
+        "name": "Website_News",
+        "description": "=Call this tools to analyse website news from our competitor. Insert Website News Section URL only.",
+        "workflowId": {
+          "__rl": true,
+          "value": "d3ZBDuYOgOSUhZrS",
+          "mode": "list",
+          "cachedResultName": "Web"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        660
+      ],
+      "id": "47820f16-f7c4-4be9-a5d3-5b638897dc55",
+      "name": "Website_News"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# Information\n\nInformation about the competitor:\n\nTitle: {{ $node[\"Airtable\"].json.Competitor }}.\nWebsite URL: {{ $node[\"Airtable\"].json.Website_News }}.\nYoutube URL: {{ $node[\"Airtable\"].json.Youtube }}.\nFacebook URL: {{ $node[\"Airtable\"].json.Facebook }}.\nTodays date: {{ $now }}.\n\n# Task\n\nGenerate the report by using Tavily News, Website News and Screenshot API tools. \n\n# SOP\n\n1. For Tavily tool, just send the title of the company ({{ $node[\"Airtable\"].json.Competitor }}) and nothing else.\n2. For Website News tool, just send the Website News URL ({{ $node[\"Airtable\"].json.Website_News }}) and nothing else.\n3. For Youtube tool, just send the Youtube ({{ $node[\"Airtable\"].json.Youtube }}) and nothing else.\n4. For Facebook tool, just send the Facebook ({{ $node[\"Airtable\"].json.Facebook }}) and nothing else.\n\n# Output\n\n1. In your output, just write a report without any additional text.\n2. Don't forget to add sources URL at the end of each paragraph.\n3. Use full sentences, in depth analysis and not just a vague bullet points in your output.\n4. viết toàn bộ bằng tiếng việt",
+        "options": {
+          "systemMessage": "=# Role\n\nYou are an expert Competitive Research Agent specializing in comprehensive competitor analysis and market intelligence. Your expertise lies in gathering, analyzing, and synthesizing information from multiple sources to provide actionable competitive insights.\n\n# Objective\n\nGenerate a detailed competitor analysis report by using only:\n\n- Website news analysis using Website Analysis Tool.\n\n# Context\n\nYou will receive competitor names and their main business focus.  \nYou have access to one primary tools:\n\n- Website Analysis Tool: For extracting and analyzing website news.\n\nYou need to use all these 1 tools every time.  \n**Only collect news and updates from a maximum of 7 days before the current date.**\n\n# Output Format\nviết bằng tiếng việt  \nTrang trí báo cáo thật đẹp  \nDeliver in clean, formatted Markdown  \nInclude full URLs for all sources  \nProvide comprehensive analysis with complete sentences  \nEvery insight must be traceable to specific tools used  \nInclude timestamps for time-sensitive information\n\n# Example Structure\n\nCompetitor: [Company Name]\n\n## Latest News (Trong vòng 7 ngày gần nhất)\n\n[Date]: [Key news point]  \n[Date]: [Key news point]  \n[Date]: [Key news point]\n\n## Website News (Trong vòng 7 ngày gần nhất)\n\nLatest News Summary: [Main news from the last 7 days]\n\n## Key Insights\n\nKey Point 1: [Key point 1],  \nKey Point 2: [Key point 2],  \nKey Point 3: [...]."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -480,
+        240
+      ],
+      "id": "bc72e52f-7a35-4f0a-9c7d-6a9db56f75d4",
+      "name": "Website Research Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# Information\n\nInformation about the competitor:\n\nFacebook: {{ $node[\"Airtable\"].json.Facebook }}.\nYoutube: {{ $node[\"Airtable\"].json.Youtube }}.\nTodays date: {{ $now }}.\n\n# Task\n\nGenerate the report using Facebook and Youtube analyzers.\n\n# SOP\n\n1. For Facebook Analyzer, just send the company URL ({{ $node[\"Airtable\"].json.Facebook }}) and nothing else.\n2. For Youtube Analyzer, just send the Youtube handle ({{ $node[\"Airtable\"].json.Youtube }}).\n\n# Output\n\n1. In your output, just write a report without any additional text.\n2. Don't forget to add sources URL at the end.\n3. Use full sentences, in depth analysis and not just a vague bullet points in your output.\n4. viết bằng tiếng việt",
+        "options": {
+          "systemMessage": "=# Role\n\nYou are a Social Media News Collector who gathers the latest company updates and announcements across YouTube and Facebook.\n\n# Task\n\nCollect and compile recent company news and announcements from social media platforms using specialized tools for each platform.\n\n# Context\n\nYou will receive company names and use platform-specific tools to gather their latest updates from the past 7 days. Each tool will extract recent posts, announcements, and news.\n\n# Tools Available\n\nFacebook Analyzer: Extracts latest posts and reels from Facebook\nYouTube Analyzer: Collects latest video uploads and channel announcements. This tool will output you with latest video title and descriptions.\n\n# Output format\nđầu ra viết bằng tiếng việt\n## Social Network Updates: [Company Name]\n\n**Period**: [Last 7 days]\n\n### Facebook Updates\n- [Date]: [News/Update]\nSource: [URL]\n- [Date]: [News/Update]\nSource: [URL]\n\n### YouTube Updates\n- [Date]: [Video Title/Announcement]\nSource: [URL]\n- [Date]: [Video Title/Announcement]\nSource: [URL]"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        -20,
+        240
+      ],
+      "id": "6fe9c3fb-0630-41da-b0b3-6e589eb2872c",
+      "name": "Social Media Research Agent"
+    },
+    {
+      "parameters": {
+        "name": "Youtube_Tool",
+        "description": "=Call this tool to get Youtube Analysis.  Insert Youtube URL only.",
+        "workflowId": {
+          "__rl": true,
+          "value": "9IGcECNJ58ItYGF5",
+          "mode": "list",
+          "cachedResultName": "Youtube"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        60,
+        660
+      ],
+      "id": "3b4c02b2-e6a4-4440-b553-5ba1c60eb91b",
+      "name": "Youtube Analyzer"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Information you should create Google Doc and report on is defined below.\n\nInformation from general scrape: {{ $node[\"Website Research Agent\"].json.output }}.\n\nInformation from social media: {{ $node[\"Social Media Research Agent\"].json.output }}.\n\nVERY IMPORTANT: INCLUDE ALL THE SOURCES AS HYPERLINKS IN THE REPORT.  \nDO NOT include markdown formatting such as ```html or ``` at the beginning and end of your output. Output pure HTML only without markdown fences.\n\nUpdate not onlye news section with URLs, but also social media channels, internal company news and any other source you will find. Also, include exact posts / news link, not just a basic url to the company website or social media profile.\n\n## Important\n\nYou shouldn't change any content. Just add HTML tags without any content modification.\n\n## HTML Format you should follow:\n\nCSS Color Schema:\ncssCopy:root {\n    --primary-color: #004c3f;     /* Main brand color */\n    --secondary-color: #95bf47;    /* Accent color */\n    --text-color: #212b36;         /* Main text */\n    --background-color: #ffffff;   /* Page background */\n    --section-bg: #f4f6f8;         /* Section background */\n    --link-color: #008060;         /* Links */\n}\n\nCore Structure & Spacing:\n\ncssCopy.section {\n    margin-bottom: 1rem;  \n    padding: 1.5rem;      \n\n.container {\n    max-width: 1200px;\n    margin: 0 auto;\n    padding: 1.5rem;     \n\nHeading Hierarchy:\n\n\nStart with h2 as the highest level\nUse this hierarchy:\ncssCopyh2 {\n    font-size: 1.5rem;  \n    color: var(--primary-color);\n    margin-bottom: 1rem;\n    border-bottom: 3px solid var(--secondary-color);\n    padding-bottom: 0.5rem;\n}\n\nh3 {\n    font-size: 1.2rem;  \n    color: var(--primary-color);\n    margin: 1rem 0 0.75rem 0;\n}\n\n\n\nSection Structure:\n\nhtmlCopy<div class=\"container\">\n    <!-- Start directly with section, no header div -->\n    <section class=\"section\">\n        <h2>Section Title</h2>\n        <p>Content here</p>\n    </section>\n</div>\n\nNews Items Format (Tighter Spacing):\n\nhtmlCopy<div class=\"news-item\">\n    <div class=\"date\">YYYY-MM-DD</div>\n    <p>Content here</p>\n</div>\n\n<style>\n.news-item {\n    padding: 1rem;        \n    margin-bottom: 0.75rem; \n    border-radius: 6px;\n    border-left: 4px solid var(--secondary-color);\n}\n</style>\n\nList Spacing:\n\ncssCopyul {\n    list-style-type: none;\n}\n\nli {\n    margin-bottom: 0.75rem; \n    padding-left: 1rem;      \n}",
+        "messages": {
+          "messageValues": [
+            {
+              "message": "## Role \n\nYou are a Document Agent specializing in converting research reports into professional HTML format.  \n\n## Task \n\nConvert research reports into clean HTML format based on the information you get.\n\n## Context \n\nYou receive structured research reports from the Website and Social Media Research Agents and need to create report with proper HTML formatting.  \n\n# Important\n\nYou shouldn't change any content. Just add HTML tags without any content modification."
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        400,
+        240
+      ],
+      "id": "6a8f60db-677b-4607-8e4a-bca229b31c39",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "subject": "=Phân Tích Đối Thủ: {{ $node[\"Airtable\"].json.Competitor }} Report {{($now.format('yyyy-MM-dd')) }}",
+        "message": "={{ $json.text }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        800,
+        240
+      ],
+      "id": "5d6665d3-3fd5-4cf0-8aad-b2a5ccbff10e",
+      "name": "Gmail",
+      "webhookId": "f82202d1-81d3-4921-9184-e7ae61f6c44d",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "QUy6DAQwuROI4a1z",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [
+                4,
+                1,
+                0
+              ],
+              "triggerAtHour": "={{ 9 }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1000,
+        240
+      ],
+      "id": "da7dfec2-39ca-4374-b5cf-8b6b99a13303",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "apppRSKSr5r70mI3O",
+          "mode": "list",
+          "cachedResultName": "n8n",
+          "cachedResultUrl": "https://airtable.com/apppRSKSr5r70mI3O"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblpdNjFCydRxQGCW",
+          "mode": "list",
+          "cachedResultName": "Hồng Ngọc",
+          "cachedResultUrl": "https://airtable.com/apppRSKSr5r70mI3O/tblpdNjFCydRxQGCW"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -700,
+        240
+      ],
+      "id": "b364a407-4420-4c73-b8cb-5b924b6caf71",
+      "name": "Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "FD0oV1xUOD55iRYn",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -20,
+        0
+      ],
+      "id": "e4f53e04-7002-475c-92e2-87e7088fe285",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "JkCpOPgVbLg2MpUx",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $('Social Media Research Agent').item.json.output }}{{ $('Website Research Agent').item.json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1040,
+        240
+      ],
+      "id": "a7b3deb0-1ce3-4411-a420-c419f11b3070",
+      "name": "Telegram",
+      "webhookId": "7d7c2f48-0ad3-4245-bf60-9b4690fc8a0c",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "## Crawl Social\n",
+        "height": 200,
+        "width": 340
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        20,
+        580
+      ],
+      "id": "d5c73f04-1a96-442e-aec7-b1c14f5f6f08",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Crawl Website\n",
+        "height": 200,
+        "width": 360
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -460,
+        580
+      ],
+      "id": "00bf5f86-6166-4ba1-ab0f-13667a900af1",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "name": "Facebook_Analyzer",
+        "description": "=Call this tool to get Facebook profile posts analysis. Insert Facebook URL only.",
+        "workflowId": {
+          "__rl": true,
+          "value": "YvjbAPDt9AwIJr94",
+          "mode": "list",
+          "cachedResultName": "Facebook"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        240,
+        660
+      ],
+      "id": "49801c31-e7a2-429f-8745-5ec2df3d0cfd",
+      "name": "Facebook Analyzer"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1000,
+        440
+      ],
+      "id": "a936accb-3749-4717-8148-ebf761565685",
+      "name": "Telegram Trigger",
+      "webhookId": "78b476de-8001-4ed2-b257-80fe6dc7598c",
+      "credentials": {
+        "telegramApi": {
+          "id": "E0PGcpGXAuQDHwtm",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tavily Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Website Research Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Website_News": {
+      "ai_tool": [
+        [
+          {
+            "node": "Website Research Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Website Research Agent": {
+      "main": [
+        [
+          {
+            "node": "Social Media Research Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Social Media Research Agent": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Youtube Analyzer": {
+      "ai_tool": [
+        [
+          {
+            "node": "Social Media Research Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable": {
+      "main": [
+        [
+          {
+            "node": "Website Research Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Website Research Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Social Media Research Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Facebook Analyzer": {
+      "ai_tool": [
+        [
+          {
+            "node": "Social Media Research Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Bangkok",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "6b742b9d-c7ee-4208-98c7-5892f529f747",
+  "meta": {
+    "instanceId": "c0751754e5fba42ed05a61542eda960715d62bf9a01b491518dfeeb287b1523a"
+  },
+  "id": "3248BxWcMfAc5Y6v",
+  "tags": [
+    {
+      "createdAt": "2025-04-26T02:08:36.984Z",
+      "updatedAt": "2025-04-26T02:08:36.984Z",
+      "id": "NMlm2mTYJwqrMVRX",
+      "name": "Theo dõi đối thủ"
+    }
+  ]
+}
