@@ -1,0 +1,106 @@
+{
+  "name": "CPTavily-HongNgoc",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tavily.com/search",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n   \"api_key\":\"YOUR_API\",\n   \"query\":\"{{$json.query}}\",\n   \"topic\": \"news\",\n   \"search_depth\":\"advanced\",\n   \"include_answer\":true,\n   \"topic\":\"news\",\n   \"days\":7,\n   \"include_raw_content\":true,\n   \"max_results\":15,\n   \"include_images\": false,\n   \"include_image_descriptions\": false,\n   \"include_domains\": [\"hongngochospital.vn\"],\n   \"exclude_domains\": []\n }",
+        "options": {}
+      },
+      "id": "10f166f1-b78f-42ce-ab62-7350cdb18fb5",
+      "name": "Tavily",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -280,
+        -60
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "79359c7d-5a8f-4b0a-9417-743b84645875",
+              "name": "Response",
+              "value": "={{ $json.results }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -20,
+        -60
+      ],
+      "id": "70f8dc10-e36a-49f7-bd6e-38abc018ded7",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -560,
+        -60
+      ],
+      "id": "42dff239-61b3-4e8b-bab3-0c4920c69d57",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Tavily": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Tavily",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "38eb6c25-c029-44c0-83d0-18de6d31fdf2",
+  "meta": {
+    "instanceId": "c0751754e5fba42ed05a61542eda960715d62bf9a01b491518dfeeb287b1523a"
+  },
+  "id": "87Y5RBWjopQaIDvV",
+  "tags": [
+    {
+      "createdAt": "2025-04-22T09:48:18.975Z",
+      "updatedAt": "2025-04-22T09:48:18.975Z",
+      "id": "u17jDGma8dof3GxP",
+      "name": "share"
+    }
+  ]
+}
