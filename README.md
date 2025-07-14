@@ -1,34 +1,40 @@
-# AI-Agent with n8n Automation: Competitor Monitoring & Analysis
+# Automated YouTube Channel Metrics Pipeline (n8n + AI-Agent)
 
-This project implements an autonomous agent—powered by Large Language Models—that continuously tracks, collects, and interprets intelligence on your competitors using n8n’s no-code/low-code workflows.
+This n8n workflow lets you monitor multiple YouTube channels (grouped by “teams”) and automatically collect, enrich, and store video-level metrics into a Google Sheet. Under the hood it:
 
-## Key Features
+1. **Manual Trigger**  
+   Starts when you click **Execute Workflow** in the n8n editor.
 
-* **Automated Data Collection**: Scrapes competitor websites, social media feeds, job boards, and public APIs on a defined schedule.
+2. **Team Configuration**  
+   Six **Set Team** nodes define different groups (e.g. Team 1, Team 2, Team SEO, Team Cộng đồng, etc.) along with their corresponding YouTube channel URLs.
 
-* **Intelligent Insight Extraction**: Uses AI prompts to distill raw data into meaningful insights—trend detection, product feature comparisons, pricing shifts, and sentiment analysis.
+3. **Channel Lookup & Playlists**  
+   For each team:  
+   - An **HTTP Request** to the YouTube Data API resolves the channel’s handle → returns `contentDetails.relatedPlaylists.uploads`.  
+   - A **YouTube → getAll (playlistItem)** node fetches all video IDs from the channel’s upload playlist.
 
-* **Dynamic Workflow Orchestration**: n8n nodes handle conditional logic, error retries, and multi-step pipelines (e.g., fetch → parse → classify → store).
+4. **Video Details Enrichment**  
+   For each video ID:  
+   - A **YouTube → get (video)** node pulls metadata (title, published date).  
+   - A **Set** node then maps into a uniform schema:  
+     - **Team**, **Platform** (“YouTube”), **Channel Name**, **Channel URL**, **Channel Creation Date**  
+     - **Video URL**, **Published Date** (and month), **Title**, **View/Like/Comment** counts
 
-* **Custom Alerts & Reports**: Generates and distributes summary reports (via email) whenever significant competitor moves are detected.
+5. **Merging & Aggregation**  
+   Merge nodes collate all teams’ streams of enriched records into one unified data output.
 
-* **Extensible & Configurable**: Easily add new data sources or analysis modules by dragging in n8n nodes and tweaking a few parameters.
+6. **Destination: Google Sheets**  
+   The final **Google Sheets → appendOrUpdate** node writes/appends each row into a specified spreadsheet and tab, so you can immediately visualize trends or build dashboards.
 
-## Technologies Used
+---
 
-* **n8n**: Orchestration of triggers, HTTP requests, and conditional branches without writing boilerplate code.
+## Key Benefits
 
-* **OpenAI API (GPT-4)**: Natural-language understanding for parsing press releases, blog posts, and social chatter.
+- **Hands-off data refresh**  
+  Just click **Test workflow** to pull the latest stats across all monitored channels.
 
-* **Database & Storage**: PostgreSQL (or MongoDB) for structured logs; S3 (or similar) for archival of raw snapshots.
+- **Scalable to more teams**  
+  Simply duplicate a **Set Team → channel lookup → video branch** for new channels.
 
-* **Notifications**: Slack/Webhook, email SMTP, or Google Workspace integration for report delivery.
-
-## Benefits
-
-* **Real-Time Competitive Edge**: Never miss a product launch, price change, or hiring spike.
-
-* **Reduced Manual Work**: Replace piecemeal scripts and one-off dashboards with a unified, maintainable automation.
-
-* **Actionable Intelligence**: Move from data overload to concise, AI-curated insights you can act on immediately.
-
+- **Centralized reporting**  
+  All metrics land in a single Google Sheet for easy filtering, charting, or downstream analysis.
