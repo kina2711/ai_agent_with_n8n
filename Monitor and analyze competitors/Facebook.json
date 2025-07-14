@@ -1,0 +1,169 @@
+{
+  "name": "Facebook",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d812e6d4-fc87-4e1e-bf92-e134bbaf76af",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/apify~facebook-posts-scraper/run-sync-get-dataset-items?token=YOURTOKEN",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"resultsLimit\": 10,\n    \"startUrls\": [\n        {\n            \"url\": \"{{ $json.query }}\",\n            \"method\": \"GET\"\n        }\n    ]\n}",
+        "options": {}
+      },
+      "id": "872fe8f1-e798-41f4-9779-428e67738c73",
+      "name": "Run Actor",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1d2e5f3-f4b9-4f02-8b6d-a9343b6fb3d0",
+              "name": "ptb_Response",
+              "value": "={{ $json.ptb }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1000,
+        0
+      ],
+      "id": "3b59a658-9034-48f9-82b5-e65700430815",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "text",
+              "renameField": "="
+            },
+            {
+              "fieldToAggregate": "likes"
+            },
+            {
+              "fieldToAggregate": "time"
+            },
+            {
+              "fieldToAggregate": "url"
+            }
+          ]
+        },
+        "options": {
+          "mergeLists": true
+        }
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        500,
+        0
+      ],
+      "id": "fc2647b6-2877-44a0-a316-823195406938",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Khởi tạo mảng rỗng ptb để chứa các post riêng lẻ\nconst ptb = [];\n\n// Lặp qua từng item sau khi aggregate (mỗi item chứa các trường là mảng)\nfor (const item of items) {\n  // Lấy ra các trường đã được aggregate\n  const { text, likes, time, url } = item.json;\n\n  // Lặp qua từng phần tử của mảng (giả sử các mảng này cùng độ dài)\n  for (let i = 0; i < text.length; i++) {\n    ptb.push({\n      text: text[i],\n      likes: likes[i],\n      time: time[i],\n      url: url[i]\n    });\n  }\n}\n\n// Trả về một item duy nhất, chứa mảng ptb trong trường json\nreturn [\n  {\n    json: {\n      ptb: ptb\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        740,
+        0
+      ],
+      "id": "9babe68c-0af6-49f5-93d1-4662eb08d1db",
+      "name": "Code1"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "query": "https://www.linkedin.com/in/connorgillivan/"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Run Actor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run Actor": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c409871c-1cf2-4339-a6f5-b50366371102",
+  "meta": {
+    "instanceId": "c0751754e5fba42ed05a61542eda960715d62bf9a01b491518dfeeb287b1523a"
+  },
+  "id": "YvjbAPDt9AwIJr94",
+  "tags": []
+}
